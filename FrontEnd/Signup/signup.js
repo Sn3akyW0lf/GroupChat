@@ -7,6 +7,7 @@ const msg_username = document.getElementById('msg_username');
 const msg_email = document.getElementById('msg_email');
 const msg_dup = document.getElementById('msg_dup');
 const msg_phone = document.getElementById('msg_phone');
+const msg_dup_phone = document.getElementById('msg_dup_phone');
 const msg_password = document.getElementById('msg_password');
 
 myForm.addEventListener('submit', onSubmit);
@@ -47,22 +48,30 @@ async function onSubmit(e) {
 
             console.log(objUser);
 
-            // window.location.replace('login.html');  
+            let res = await axios.post('http://localhost:4000/signup', objUser);
 
-            username.value = '';
-            email.value = '';
-            password.value = '';
-            studentParentPhone.value = '';
+            window.location.replace('../Login/login.html');
+
+            // username.value = '';
+            // email.value = '';
+            // password.value = '';
+            // studentParentPhone.value = '';
         }
 
 
 
     } catch (err) {
-        console.log('err');
-        msg_dup.style.color = 'chocolate';
-        msg_dup.style.background = 'beige';
-        msg_dup.innerHTML = 'Sorry, the Email already Exists!';
-        setTimeout(() => msg_dup.remove(), 3000);
-        
+        console.log('err---', err.response.data.errors[0].path === 'phone');
+        if (err.response.data.errors[0].path === 'email') {
+            msg_dup.style.color = 'chocolate';
+            msg_dup.style.background = 'beige';
+            msg_dup.innerHTML = 'Sorry, the Email already Exists!';
+            setTimeout(() => msg_dup.remove(), 3000);
+        } else if (err.response.data.errors[0].path === 'phone') {
+            msg_dup_phone.style.color = 'chocolate';
+            msg_dup_phone.style.background = 'beige';
+            msg_dup_phone.innerHTML = 'Sorry, the Phone Number is already Registered!';
+            setTimeout(() => msg_dup_phone.remove(), 3000);
+        }
     }
 }
