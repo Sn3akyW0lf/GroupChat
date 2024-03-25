@@ -33,18 +33,11 @@ async function onSubmit(e) {
             let res = await axios.post('http://localhost:4000/login', objUser);
             // let res = await axios.post('/login', objUser);
 
-            // console.log(res);
-            // console.log(res.data.premium);
-
-            let prem = res.data.premium ? 1 : 0;
-
-            // alert(res.data.message);
+            console.log(res);
 
             localStorage.setItem('token', res.data.token);
-            localStorage.setItem('isPremium', prem);
-            localStorage.setItem('rowSize', 5);
 
-            window.location.replace('index.html');
+            window.location.replace('../GroupChat/index.html');
 
             // username.value = '';
             // email.value = '';
@@ -61,12 +54,10 @@ async function onSubmit(e) {
             msg_dup.style.color = 'chocolate';
             msg_dup.style.background = 'beige';
             msg_dup.innerHTML = 'The Email is not Registered, Please Register!';
-            setTimeout(() => msg_dup.remove(), 3000);
         } else if (err.response.status === 401) {
             msg_wp.style.color = 'chocolate';
             msg_wp.style.background = 'beige';
             msg_wp.innerHTML = 'The Password is Wrong!';
-            setTimeout(() => msg_wp.remove(), 3000);
         }
         
     }
