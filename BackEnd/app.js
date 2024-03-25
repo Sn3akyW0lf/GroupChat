@@ -14,7 +14,10 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'null',
+    methods: ['GET', 'POST']
+}));
 
 const userRoutes = require('./routes/user');
 
