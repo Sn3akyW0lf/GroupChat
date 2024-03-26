@@ -58,7 +58,7 @@ exports.postLogin = async (req, res, next) => {
                 }
                 if (result) {
                     console.log('Correct Password');
-                    return res.status(200).json({ success: true, message: 'User Logged in Successfully', token: generateAccessToken(user[0].id) });
+                    return res.status(200).json({ success: true, message: 'User Logged in Successfully', token: generateAccessToken(user[0].id), email: user[0].email });
                 } else {
                     console.log('Wrong Password');
                     return res.status(401).json({ success: false, message: 'Wrong Password' });
@@ -67,6 +67,21 @@ exports.postLogin = async (req, res, next) => {
         } else {
             res.status(404).json(user);
         }
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+exports.getUserList = async (req, res, next) => {
+    try {
+        const users = await User.findAll({
+            attributes: [
+                'name'
+            ]
+        });
+
+        return res.status(200).json({ success: true, message: 'User Logged in Successfully', users: users});        
+        console.log(users);
     } catch (err) {
         console.log(err);
     }

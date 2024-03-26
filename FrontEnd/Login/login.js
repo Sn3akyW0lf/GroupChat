@@ -33,9 +33,10 @@ async function onSubmit(e) {
             let res = await axios.post('http://localhost:4000/login', objUser);
             // let res = await axios.post('/login', objUser);
 
-            console.log(res);
+            console.log(res.data);
 
             localStorage.setItem('token', res.data.token);
+            localStorage.setItem('email' , res.data.email);
 
             window.location.replace('../GroupChat/index.html');
 
