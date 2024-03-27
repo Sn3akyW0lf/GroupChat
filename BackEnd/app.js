@@ -9,6 +9,7 @@ require('dotenv').config();
 const sequelize = require('./util/database');
 
 const User = require('./models/user');
+const Message = require('./models/message');
 
 const cors = require('cors');
 
@@ -20,10 +21,15 @@ app.use(cors({
 }));
 
 const userRoutes = require('./routes/user');
+const messageRoutes = require('./routes/message');
 
 app.use(express.json());
 
 app.use(userRoutes);
+app.use('/message', messageRoutes);
+
+User.hasMany(Message);
+Message.belongsTo(User);
 
 async function start() {
     try{
