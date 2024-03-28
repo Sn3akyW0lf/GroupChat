@@ -12,4 +12,6 @@ router.post('/post-message', userAuth.authenticate, messageController.postMessag
 
 router.get('/get-messages', userAuth.authenticate, messageController.getMessages);
 
+router.get('/get-messages/:date', userAuth.authenticate, messageController.getNewMessages);
+
 module.exports = router;

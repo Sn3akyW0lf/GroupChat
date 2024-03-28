@@ -4,9 +4,9 @@ const ul = document.getElementById('joined');
 const users = document.getElementById('users');
 const send_msg = document.getElementById('send_msg');
 const txt_msg = document.getElementById('txt_msg');
-let token = localStorage.getItem('token');
 const tblChat = document.getElementById('tblChat');
-
+let token = localStorage.getItem('token');
+let lastChat = '';
 
 window.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -37,46 +37,76 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         })
 
-        let chats = await axios.get('http://localhost:4000/message/get-messages', {
-            headers: {
-                'Authorization': token
-            }
-        });
+        let date = new Date().toISOString();
 
-        console.log(chats.data);
+        // getChats();
 
-        chats.data.messages.forEach(chat => {
-            // console.log(chat);
-            printChat(chat);
-        });
+        await getChats();
 
+        send_msg.onclick = async function () {
+            let msgObj = {
+                user: token,
+                msg: txt_msg.value
+            };
+
+            let response = await axios.post('http://localhost:4000/message/post-message', msgObj, {
+                headers: {
+                    'Authorization': token
+                }
+            });
+            printChat(response.data);
+        };
+
+        console.log(lastChat);
+
+        setInterval(async () => await getNewChats(lastChat), 5000);
+        
     } catch (err) {
         console.log(err);
     }
 });
 
-send_msg.addEventListener('click', async () => {
-    // console.log(txt_msg.value);
-    // console.log(token);
 
-    let msgObj = {
-        user: token,
-        msg: txt_msg.value
-    };
 
-    let response = await axios.post('http://localhost:4000/message/post-message', msgObj, {
-        headers: {
-            'Authorization': token
-        }
-    });
+async function getChats () {
+    try {
+        let chats = await axios.get(`http://localhost:4000/message/get-messages`, {
+            headers: {
+                'Authorization': token
+            }
+        });
 
-    console.log(response.data);
+        chats.data.messages.forEach(chat => {
+            // console.log(chat.createdAt);
+            printChat(chat);
+        });
+    } catch (err) {
+        console.log(err);
+    }
+       
+}
 
-    printChat(response.data);
+async function getNewChats(date) {
+    try {
+        let chats = await axios.get(`http://localhost:4000/message/get-messages/${date}`, {
+            headers: {
+                'Authorization': token
+            }
+        });
 
-});
+        chats.data.messages.forEach(chat => {
+            console.log(chat);
+            printChat(chat);
+        });
+
+        // console.log(chats.data.messages[0].createdAt, date, chats.data.messages[0].createdAt < date);
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 function printChat(row) {
+    lastChat = row.createdAt;    
     let tr = document.createElement('tr');
     let td1 = document.createElement('td');
     let td2 = document.createElement('td');

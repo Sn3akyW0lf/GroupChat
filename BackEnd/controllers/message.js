@@ -1,5 +1,6 @@
 const Message = require('../models/message');
 
+const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
 exports.postMessage = async (req, res) => {
@@ -21,7 +22,13 @@ exports.postMessage = async (req, res) => {
 exports.getMessages = async (req, res) => {
 
     try {
-        const chats = await Message.findAll();
+        const chats = await Message.findAll({
+            attributes: [
+                'message',
+                'sender',
+                'createdAt'
+            ]
+        });
 
         // console.log(chats);
 
@@ -29,4 +36,24 @@ exports.getMessages = async (req, res) => {
     } catch (err) {
         console.log(err);
     }
+};
+
+exports.getNewMessages = async (req, res) => {
+
+    let dateStr = new Date(req.params.date);
+
+    console.log(dateStr);
+    
+    let chats = await Message.findAll({
+        attributes: [
+            'message',
+            'sender',
+            'createdAt'
+        ],
+        where: {
+            createdAt: { [Sequelize.gt]: `${dateStr}` },
+        },
+    });
+
+    console.log(chats);
 };

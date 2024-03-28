@@ -7,13 +7,13 @@ const authenticate = async (req, res, next) => {
         const token = req.header('authorization');
         // console.log('token: ', token);
 
-        console.log(process.env.TOKEN_SECRET);
+        // console.log(process.env.TOKEN_SECRET);
 
         const tk = process.env.TOKEN_SECRET;
 
         const userId = jwt.verify(token, tk);
 
-        console.log('userId - ', userId.userId);
+        // console.log('userId - ', userId.userId);
 
         let user = await User.findByPk(userId.userId);
 
