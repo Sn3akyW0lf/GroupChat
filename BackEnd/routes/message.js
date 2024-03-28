@@ -10,4 +10,6 @@ const router = express.Router();
 
 router.post('/post-message', userAuth.authenticate, messageController.postMessage);
 
+router.get('/get-messages', userAuth.authenticate, messageController.getMessages);
+
 module.exports = router;

@@ -50,8 +50,8 @@ async function onSubmit(e) {
 
             let res = await axios.post('http://localhost:4000/signup', objUser);
 
-            // window.location.replace('../Login/login.html');
-            alert('Successfully Signed Up!');
+            window.location.replace('../Login/login.html');
+            // alert('Successfully Signed Up!');
 
             // username.value = '';
             // email.value = '';

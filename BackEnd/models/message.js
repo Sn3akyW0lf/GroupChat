@@ -11,6 +11,9 @@ const Message = sequelize.define('message', {
     },
     message: {
         type:Sequelize.STRING
+    },
+    sender: {
+        type: Sequelize.STRING
     }
 });
 

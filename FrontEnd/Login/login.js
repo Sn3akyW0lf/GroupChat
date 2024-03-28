@@ -36,7 +36,8 @@ async function onSubmit(e) {
             console.log(res.data);
 
             localStorage.setItem('token', res.data.token);
-            localStorage.setItem('email' , res.data.email);
+            localStorage.setItem(`${res.data.token}` , res.data.email);
+            localStorage.setItem(`${res.data.email}`, res.data.name);
 
             window.location.replace('../GroupChat/index.html');
 
