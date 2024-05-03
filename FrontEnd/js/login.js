@@ -38,8 +38,11 @@ async function onSubmit(e) {
             localStorage.setItem('token', res.data.token);
             localStorage.setItem(`${res.data.token}` , res.data.email);
             localStorage.setItem(`${res.data.email}`, res.data.name);
+            const chatArray = []
+            let string = JSON.stringify(chatArray);
+            localStorage.setItem('chatHistory', string);
 
-            window.location.replace('../GroupChat/index.html');
+            window.location.replace('./index.html');
 
             // username.value = '';
             // email.value = '';

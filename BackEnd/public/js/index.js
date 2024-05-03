@@ -1,3 +1,8 @@
+const socket = io();
+
+socket.on('message', message => {
+});
+
 let userList = [];
 
 const ul = document.getElementById('joined');
@@ -41,12 +46,15 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         // getChats();
 
+        console.log(date);
+
         await getChats();
 
         send_msg.onclick = async function () {
             let msgObj = {
                 user: token,
-                msg: txt_msg.value
+                msg: txt_msg.value,
+                date: date
             };
 
             let response = await axios.post('http://localhost:4000/message/post-message', msgObj, {
@@ -59,7 +67,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         console.log(lastChat);
 
-        setInterval(async () => await getNewChats(lastChat), 5000);
+        // setInterval(async () => await getNewChats(lastChat), 5000);
         
     } catch (err) {
         console.log(err);
@@ -76,8 +84,10 @@ async function getChats () {
             }
         });
 
+        console.log(chats.data);
+
         chats.data.messages.forEach(chat => {
-            // console.log(chat.createdAt);
+            console.log(chat);
             printChat(chat);
         });
     } catch (err) {
@@ -106,16 +116,16 @@ async function getNewChats(date) {
 }
 
 function printChat(row) {
-    lastChat = row.createdAt;    
+    lastChat = row.timestamp;    
     let tr = document.createElement('tr');
     let td1 = document.createElement('td');
     let td2 = document.createElement('td');
 
-    if (localStorage.getItem(localStorage.getItem(token)) === row.sender) {
+    if (localStorage.getItem(localStorage.getItem(token)) === row.user.name) {
         td1.appendChild(document.createTextNode(`You`));
         td1.className = 'fw-bold text-info';
     } else {
-        td1.appendChild(document.createTextNode(`${row.sender}`));
+        td1.appendChild(document.createTextNode(`${row.user.name}`));
         td1.className = 'fw-bold text-success';        
     }
 

@@ -1,19 +1,25 @@
 const Message = require('../models/message');
+const User = require('../models/user');
+const io = require('../socket');
+const formatMessage = require('../util/message');
 
-const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const sequelize = require('../util/database');
 
 exports.postMessage = async (req, res) => {
-    // console.log(req.user);
+    // console.log(req.body);
     try {
+        const { msg, date } = req.body
         const data = await req.user.createMessage({
-            message: req.body.msg,
-            sender: req.user.name
+            message: msg,
+            timestamp: date
         });
 
-        console.log(data.message);
+        // console.log(data.message);
 
-        return res.status(201).json({ message: data.message, sender: req.user.name });
+        
+
+        return res.status(201).json(formatMessage(req.user.name, data.message));
     } catch (err) {
         console.log(err);
     }
@@ -21,18 +27,63 @@ exports.postMessage = async (req, res) => {
 
 exports.getMessages = async (req, res) => {
 
+    let { lastChat } = req.params;
+    console.log(req.params.lastChat);
+
     try {
-        const chats = await Message.findAll({
-            attributes: [
-                'message',
-                'sender',
-                'createdAt'
-            ]
-        });
+        if (lastChat === 'undefined') {
+            console.log('IN UNDEFINED');
+            lastChat = -1;
+            console.log(lastChat);
+            const chats = await Message.findAll({
+                attributes: [
+                    'id',
+                    'message',
+                    'timestamp'
+                ],
+                include: {
+                    model: User,
+                    attributes: ['name']
+                },
+                where: {
+                    id: {
+                        [Op.gt]: `${lastChat}`
+                    }
+                }
 
-        // console.log(chats);
+            });
+            // console.log(chats);
 
-        return res.status(200).json({ success: true, messages: chats });
+            return res.status(200).json({ success: true, messages: chats });
+
+        } else {
+            console.log('IN VALUE CONDITION');
+            // console.log(lastChat);
+            const chats = await Message.findAll({
+                attributes: [
+                    'id',
+                    'message',
+                    'timestamp'
+                ],
+                include: {
+                    model: User,
+                    attributes: ['name']
+                },
+                where: {
+                    id: {
+                        [Op.gt]: lastChat
+                    }
+                }
+            });
+            console.log(chats);
+
+            return res.status(200).json({ success: true, messages: chats });
+
+        }
+
+        console.log(chats);
+
+        // return res.status(200).json({ success: true, messages: chats });
     } catch (err) {
         console.log(err);
     }

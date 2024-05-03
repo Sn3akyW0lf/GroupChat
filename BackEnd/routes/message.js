@@ -10,8 +10,8 @@ const router = express.Router();
 
 router.post('/post-message', userAuth.authenticate, messageController.postMessage);
 
-router.get('/get-messages', userAuth.authenticate, messageController.getMessages);
+router.get('/get-messages/:lastChat', userAuth.authenticate, messageController.getMessages);
 
-router.get('/get-messages/:date', userAuth.authenticate, messageController.getNewMessages);
+// router.get('/get-messages/:date', userAuth.authenticate, messageController.getNewMessages);
 
 module.exports = router;
