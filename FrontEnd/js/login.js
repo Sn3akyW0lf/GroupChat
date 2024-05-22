@@ -21,17 +21,12 @@ async function onSubmit(e) {
             msg_password.innerHTML = 'Please Enter Password!';
             setTimeout(() => msg_password.remove(), 3000);
         } else {
-            // console.log(username.value, email.value, password.value);
-
             objUser = {
                 email: email.value,
                 password: password.value,
             };
 
-            // console.log(objUser);
-
             let res = await axios.post('http://localhost:4000/login', objUser);
-            // let res = await axios.post('/login', objUser);
 
             console.log(res.data);
 
@@ -44,10 +39,6 @@ async function onSubmit(e) {
 
             window.location.replace('./index.html');
 
-            // username.value = '';
-            // email.value = '';
-            // password.value = '';
-            // studentParentPhone.value = '';
         }
 
 

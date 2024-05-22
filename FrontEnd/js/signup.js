@@ -37,8 +37,6 @@ async function onSubmit(e) {
             msg_password.innerHTML = 'Please Enter Password!';
             setTimeout(() => msg_password.remove(), 3000);
         } else {
-            // console.log(username.value, email.value, password.value);
-
             objUser = {
                 username: username.value,
                 email: email.value,
@@ -50,13 +48,7 @@ async function onSubmit(e) {
 
             let res = await axios.post('http://localhost:4000/signup', objUser);
 
-            window.location.replace('../Login/login.html');
-            // alert('Successfully Signed Up!');
-
-            // username.value = '';
-            // email.value = '';
-            // password.value = '';
-            // studentParentPhone.value = '';
+            window.location.replace('./login.html');
         }
 
 

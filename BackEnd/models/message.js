@@ -1,6 +1,7 @@
-const Sequelize = require('sequelize');
-
+const { DataTypes } = require('sequelize');
 const sequelize = require('../util/database');
+const User = require('./user');
+const Group = require('./group');
 
 const Message = sequelize.define('message', {
     // id: {
@@ -10,11 +11,14 @@ const Message = sequelize.define('message', {
     //     primaryKey: true
     // },
     message: {
-        type:Sequelize.STRING
+        type:DataTypes.STRING
     },
     timestamp: {
-        type: Sequelize.DATE
+        type: DataTypes.DATE
     }
 });
+
+Message.belongsTo(Group);
+Message.belongsTo(User);
 
 module.exports = Message;

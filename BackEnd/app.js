@@ -11,6 +11,8 @@ const formatMessage = require('./util/message');
 
 const User = require('./models/user');
 const Message = require('./models/message');
+const Group = require('./models/group');
+const GroupMember = require('./models/groupMember');
 
 const cors = require('cors');
 
@@ -29,15 +31,14 @@ app.use(cors({
 
 const userRoutes = require('./routes/user');
 const messageRoutes = require('./routes/message');
+const groupRoutes = require('./routes/group');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(userRoutes);
 app.use('/message', messageRoutes);
-
-User.hasMany(Message);
-Message.belongsTo(User);
+app.use('/group', groupRoutes);
 
 const botName = 'Chat Bot';
 
